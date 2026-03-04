@@ -53,13 +53,20 @@ export default function Assessment() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userId: null, responses: answers }),
             });
+
             const data = await response.json();
+
+            if (!response.ok) {
+                alert(`Analysis Failed: ${data.error || 'Server error'}`);
+                setSubmitting(false);
+                return;
+            }
+
             localStorage.setItem("latest_result", JSON.stringify(data));
             router.push("/dashboard");
         } catch (error) {
             console.error("Submission failed:", error);
-            alert("Something went wrong. Please try again.");
-        } finally {
+            alert("Network protocol failure. Please try again.");
             setSubmitting(false);
         }
     };
