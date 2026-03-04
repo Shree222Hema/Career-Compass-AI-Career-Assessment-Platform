@@ -24,7 +24,7 @@ export default function Assessment() {
     const router = useRouter();
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/questions")
+        fetch("/api/questions")
             .then((res) => res.json())
             .then((data) => {
                 setQuestions(data);
@@ -48,7 +48,7 @@ export default function Assessment() {
     const submitAssessment = async () => {
         setSubmitting(true);
         try {
-            const response = await fetch("http://localhost:5000/api/assessment/submit", {
+            const response = await fetch("/api/assessment/submit", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userId: null, responses: answers }),
