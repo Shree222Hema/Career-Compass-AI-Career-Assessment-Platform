@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "library"
+}
+
+model User {
+  id          String       @id @default(uuid())
+  email       String       @unique
+  name        String
+  password    String
+  assessments Assessment[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Career {
+  id            String   @id @default(uuid())
+  title         String   @unique
+  description   String
+  fitCriteria   String // JSON string or simplified logic
+  roadmap       String // JSON string
+  stream        String
+  courses       String
+  skills        String
+  backupOptions String
+}
+
+model Assessment {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  responses String // JSON string of user answers
+  scores    String // JSON string of category scores
+  results   String // JSON string of career matches
+  createdAt DateTime @default(now())
+}
