@@ -12,64 +12,63 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// --- Routes ---
-
-// Get Assessment Questions
-app.get('/api/questions', (req, res) => {
-    res.json(questions);
-});
-
-// 1. Scoring Logic
-const calculateScore = (responses) => {
-    // responses: { questionId: value, ... }
-    const categories = { Interest: 0, Aptitude: 0, Personality: 0, Academic: 80, Values: 0 };
-    const counts = { Interest: 0, Aptitude: 0, Personality: 0, Values: 0 };
+// --- Advanced RIASEC Scoring Logic ---
+const calculateRIASEC = (responses) => {
+    // Current RIASEC Dimensions
+    const dimensions = ['Realistic', 'Investigative', 'Artistic', 'Social', 'Enterprising', 'Conventional'];
+    const scores = { Realistic: 0, Investigative: 0, Artistic: 0, Social: 0, Enterprising: 0, Conventional: 0 };
+    const counts = { Realistic: 0, Investigative: 0, Artistic: 0, Social: 0, Enterprising: 0, Conventional: 0 };
 
     questions.forEach(q => {
         if (responses[q.id] !== undefined) {
-            categories[q.category] += responses[q.id];
+            scores[q.category] += responses[q.id];
             counts[q.category]++;
         }
     });
 
-    // Average the scores per category
-    Object.keys(counts).forEach(cat => {
-        if (counts[cat] > 0) {
-            categories[cat] = Math.round(categories[cat] / counts[cat]);
+    // Normalize to 0-100 scale per dimension
+    const normalized = {};
+    dimensions.forEach(dim => {
+        if (counts[dim] > 0) {
+            // formula: (total / (max_val * count)) * 100
+            normalized[dim] = Math.round((scores[dim] / (5 * counts[dim])) * 100);
+        } else {
+            normalized[dim] = 50; // Neutral fallback
         }
     });
 
-    return categories;
+    return normalized;
 };
 
-const getCareerMatches = async (userScores) => {
+const matchRIASECCareers = async (userProfile) => {
     const careers = await prisma.career.findMany();
+    const dimensions = ['Realistic', 'Investigative', 'Artistic', 'Social', 'Enterprising', 'Conventional'];
 
     const matches = careers.map(career => {
-        const criteria = JSON.parse(career.fitCriteria);
-        let fitScore = 0;
+        const targetProfile = JSON.parse(career.fitCriteria);
 
-        // Interest (25%)
-        fitScore += (100 - Math.abs(userScores.Interest - criteria.Interest)) * 0.25;
-        // Aptitude (25%)
-        fitScore += (100 - Math.abs(userScores.Aptitude - criteria.Aptitude)) * 0.25;
-        // Personality (20%)
-        fitScore += (100 - Math.abs(userScores.Personality - criteria.Personality)) * 0.20;
-        // Academic (20%) - Mocked for now
-        fitScore += (100 - Math.abs(userScores.Academic - criteria.Academic)) * 0.20;
-        // Values (10%)
-        fitScore += (100 - Math.abs(userScores.Values - criteria.Values)) * 0.10;
+        // Euclidean distance based similarity (inverse)
+        let sumSquaredDiff = 0;
+        dimensions.forEach(dim => {
+            const diff = userProfile[dim] - targetProfile[dim];
+            sumSquaredDiff += diff * diff;
+        });
+
+        const maxDistance = Math.sqrt(dimensions.length * (100 * 100));
+        const distance = Math.sqrt(sumSquaredDiff);
+        const similarity = Math.round((1 - (distance / maxDistance)) * 100);
 
         return {
             id: career.id,
             title: career.title,
             description: career.description,
-            fitPercentage: Math.round(fitScore),
+            fitPercentage: similarity,
             roadmap: JSON.parse(career.roadmap),
             stream: career.stream,
             courses: career.courses,
             skills: career.skills,
-            backupOptions: career.backupOptions
+            backupOptions: career.backupOptions,
+            profile: targetProfile
         };
     });
 
@@ -78,16 +77,17 @@ const getCareerMatches = async (userScores) => {
 
 // --- Endpoints ---
 
-// Submit Assessment
+app.get('/api/questions', (req, res) => res.json(questions));
+
 app.post('/api/assessment/submit', async (req, res) => {
     const { userId, responses } = req.body;
     try {
-        const scores = calculateScore(responses);
-        const matches = await getCareerMatches(scores);
+        const scores = calculateRIASEC(responses);
+        const matches = await matchRIASECCareers(scores);
 
         const assessment = await prisma.assessment.create({
             data: {
-                userId: userId || "guest", // Placeholder if no userId
+                userId: userId || null,
                 responses: JSON.stringify(responses),
                 scores: JSON.stringify(scores),
                 results: JSON.stringify(matches)
@@ -101,7 +101,6 @@ app.post('/api/assessment/submit', async (req, res) => {
     }
 });
 
-// Get Latest Result
 app.get('/api/assessment/latest/:userId', async (req, res) => {
     try {
         const assessment = await prisma.assessment.findFirst({
@@ -121,6 +120,4 @@ app.get('/api/assessment/latest/:userId', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`RIASEC Core Intelligence running on port ${PORT}`));

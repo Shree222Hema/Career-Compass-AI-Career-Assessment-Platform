@@ -1,56 +1,69 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Home() {
   return (
-    <div className="container">
-      {/* Hero Section */}
-      <section className="section-padding animate-fade" style={{ textAlign: 'center' }}>
-        <div style={{ marginBottom: '40px', borderRadius: '30px', overflow: 'hidden', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
-          <img src="/hero.png" alt="Career Compass AI" style={{ width: '100%', maxWidth: '800px', height: 'auto' }} />
+    <div className="container-adv">
+      {/* Advanced Hero Section */}
+      <section className="section-adv" style={{ textAlign: 'center' }}>
+        <div className="reveal stagger-1" style={{ marginBottom: '40px', display: 'flex', justifyContent: 'center' }}>
+          <div className="glass-panel" style={{ padding: '8px 20px', fontSize: '14px', fontWeight: 600, color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            Powered by Next-Gen AI
+          </div>
         </div>
-        <h1 style={{ fontSize: '4.5rem', marginBottom: '20px', lineHeight: 1.1 }}>
-          Navigate Your Future with <span className="text-gradient">Precision AI</span>
+
+        <h1 className="reveal stagger-1" style={{ fontSize: '5.5rem', marginBottom: '24px', letterSpacing: '-0.05em' }}>
+          Navigate your <span className="text-gradient">Career Intelligence</span>
         </h1>
-        <p style={{ fontSize: '1.25rem', color: 'var(--text-secondary)', maxWidth: '700px', margin: '0 auto 40px auto' }}>
-          Career Compass analyzes your personality, interest, and aptitude to map out your perfect professional destination. No more guesswork, just data-driven clarity.
+
+        <p className="reveal stagger-2" style={{ fontSize: '1.4rem', color: 'var(--text-secondary)', maxWidth: '800px', margin: '0 auto 48px' }}>
+          Discover professional destinations aligned with your unique behavioral profile using Holland&apos;s RIASEC logic and predictive aptitude modeling.
         </p>
-        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
-          <Link href="/register" className="btn-primary">
-            Start Free Assessment
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+
+        <div className="reveal stagger-3" style={{ display: 'flex', gap: '20px', justifyContent: 'center' }}>
+          <Link href="/register" className="btn-primary-adv" style={{ fontSize: '18px' }}>
+            Take the Assessment
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </Link>
-          <Link href="#how-it-works" className="glass-card" style={{ padding: '14px 28px', textDecoration: 'none', color: 'white', fontWeight: 600 }}>
-            How it Works
+          <Link href="#features" className="glass-panel" style={{ padding: '16px 32px', textDecoration: 'none', color: 'white', fontWeight: 600, fontSize: '18px' }}>
+            Explore Methodology
           </Link>
+        </div>
+
+        {/* Hero Visual */}
+        <div className="reveal stagger-4" style={{ marginTop: '80px', borderRadius: '40px', overflow: 'hidden', boxShadow: '0 40px 100px rgba(0,0,0,0.6)', border: '1px solid var(--glass-border)', position: 'relative', height: '600px' }}>
+          <Image
+            src="/hero.png"
+            alt="Career Compass Visualization"
+            fill
+            style={{ objectFit: 'cover' }}
+          />
         </div>
       </section>
 
-      {/* Feature Grid */}
-      <section id="how-it-works" className="section-padding">
-        <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <h2 style={{ fontSize: '2.5rem' }}>Our Multi-Dimensional <span className="text-gradient">Assessment Engine</span></h2>
+      {/* Feature Section */}
+      <section id="features" className="section-adv">
+        <div className="reveal" style={{ textAlign: 'center', marginBottom: '80px' }}>
+          <h2 style={{ fontSize: '3.5rem', marginBottom: '16px' }}>The <span className="text-gradient">RIASEC</span> Framework</h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '1.2rem' }}>We use psychological mapping to align your traits with career clusters.</p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px' }}>
           {[
-            { title: "Interest Mapping", desc: "Discover what genuinely excites you through behavioral analysis.", icon: "🎯" },
-            { title: "Aptitude Testing", desc: "Measure your logical and cognitive strengths across domains.", icon: "🧠" },
-            { title: "Personality Profile", desc: "Deep dive into your traits and workplace preferences.", icon: "✨" },
-            { title: "Academic Power", desc: "Align your current subjects with future career demands.", icon: "📚" }
+            { tag: "REALISTIC", title: "Hand-on Solvers", desc: "For those who enjoy practical, physical, and technical challenges.", color: "#3b82f6" },
+            { tag: "INVESTIGATIVE", title: "Critical Thinkers", desc: "Ideal for inquisitive minds focused on research and science.", color: "#00f2ff" },
+            { tag: "ARTISTIC", title: "Creative Spirits", desc: "Designed for individuals who thrive in self-expression and design.", color: "#ec4899" },
+            { tag: "SOCIAL", title: "Empathic Helpers", desc: "Perfect for those dedicated to teaching and helping others.", color: "#10b981" },
+            { tag: "ENTERPRISING", title: "Natural Leaders", desc: "For ambitious individuals focused on business and persuasion.", color: "#f59e0b" },
+            { tag: "CONVENTIONAL", title: "Detail Masters", desc: "Suited for organized people who excel in data and efficiency.", color: "#7000ff" }
           ].map((feature, i) => (
-            <div key={i} className="glass-card" style={{ padding: '30px' }}>
-              <div style={{ fontSize: '40px', marginBottom: '20px' }}>{feature.icon}</div>
-              <h3 style={{ marginBottom: '10px' }}>{feature.title}</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '15px' }}>{feature.desc}</p>
+            <div key={i} className={`glass-panel reveal stagger-${(i % 3) + 1}`} style={{ padding: '40px' }}>
+              <div style={{ color: feature.color, fontWeight: 800, fontSize: '13px', letterSpacing: '0.15em', marginBottom: '16px' }}>{feature.tag}</div>
+              <h3 style={{ fontSize: '24px', marginBottom: '12px' }}>{feature.title}</h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '16px' }}>{feature.desc}</p>
             </div>
           ))}
         </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="glass-card section-padding" style={{ margin: '80px 0', textAlign: 'center', padding: '60px' }}>
-        <h2 style={{ fontSize: '2.8rem', marginBottom: '20px' }}>Ready to find your <span className="text-gradient">True North?</span></h2>
-        <p style={{ marginBottom: '40px', color: 'var(--text-secondary)' }}>Join thousands of students who found clarity in their career choices.</p>
-        <Link href="/assessment" className="btn-primary">Join Now</Link>
       </section>
     </div>
   );

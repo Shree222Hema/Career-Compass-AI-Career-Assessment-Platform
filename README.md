@@ -1,5 +1,7 @@
 # Career Compass – AI Career Assessment Platform
 
+![Career Compass Hero](client/public/hero.png)
+
 Career Compass helps students discover suitable careers based on multiple psychological and academic factors.
 
 ## How to Run the Application

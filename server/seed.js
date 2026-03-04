@@ -1,118 +1,67 @@
-require('dotenv').config();
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
     const careers = [
         {
-            title: "Software Engineer",
-            description: "Design and build software applications and systems.",
-            fitCriteria: JSON.stringify({
-                Interest: 90,
-                Aptitude: 95,
-                Personality: 70,
-                Academic: 85,
-                Values: 80
-            }),
-            roadmap: JSON.stringify([
-                "Year 1: Learn programming fundamentals (Python, JS).",
-                "Year 2: Data structures and algorithms.",
-                "Year 3: Web or App development frameworks.",
-                "Year 4: Internships and open source contributions.",
-                "Year 5: Landing a junior role and specializing."
-            ]),
-            stream: "PCM (Physics, Chemistry, Maths)",
-            courses: "B.Tech/B.E in Computer Science, BCA, Software Engineering degree",
-            skills: "Problem Solving, Logic, JavaScript, Python, System Design",
-            backupOptions: "Data Analyst, QA Engineer, Technical Writer"
+            title: "Hardware Robotics Engineer",
+            description: "Design and build physical robotic systems for aerospace, medicine, or manufacturing. Requires hands-on mechanical skill and deep scientific inquiry.",
+            fitCriteria: JSON.stringify({ Realistic: 90, Investigative: 85, Artistic: 40, Social: 30, Enterprising: 50, Conventional: 70 }),
+            roadmap: JSON.stringify(["B.Tech in Mechatronics", "Certification in ROS", "Internship at Tesla/NASA", "Master's in Robotics", "Senior Robotics Lead"]),
+            stream: "Science / Engineering",
+            courses: "Mechatronics, Mechanical Engineering, IoT Specialization",
+            skills: "CAD, Python, Circuit Design, C++, Mechanical Assembly",
+            backupOptions: "Automotive Engineer, IoT Solutions Architect"
         },
         {
-            title: "Data Scientist",
-            description: "Analyze complex data to help organizations make better decisions.",
-            fitCriteria: JSON.stringify({
-                Interest: 85,
-                Aptitude: 90,
-                Personality: 60,
-                Academic: 90,
-                Values: 75
-            }),
-            roadmap: JSON.stringify([
-                "Year 1: Strong foundation in Maths and Statistics.",
-                "Year 2: Learn Python/R and SQL.",
-                "Year 3: Machine Learning basics.",
-                "Year 4: Data visualization and advanced analytics projects.",
-                "Year 5: Portfolio building and Data Science certifications."
-            ]),
-            stream: "PCM or Commerce with Applied Maths",
-            courses: "B.Sc in Statistics, Data Science, or B.Tech",
-            skills: "Statistics, Python, SQL, Machine Learning, Data Viz",
-            backupOptions: "Business Analyst, Financial Analyst"
+            title: "Data Intelligence Scientist",
+            description: "Analyze massive datasets to predict future trends and build AI models. Highly investigative and data-driven role.",
+            fitCriteria: JSON.stringify({ Realistic: 30, Investigative: 95, Artistic: 50, Social: 40, Enterprising: 60, Conventional: 85 }),
+            roadmap: JSON.stringify(["B.Sc in Computer Science", "Bootcamp in Data Science", "Junior Data Analyst", "Kaggle Competitions", "Principal Data Scientist"]),
+            stream: "Science / IT",
+            courses: "Data Analytics, Machine Learning, Statistical Modeling",
+            skills: "Python, SQL, PyTorch, R, Data Visualization (Tableau)",
+            backupOptions: "Business Intelligence Analyst, Quantitative Researcher"
         },
         {
-            title: "UX Designer",
-            description: "Create user-friendly and aesthetically pleasing digital experiences.",
-            fitCriteria: JSON.stringify({
-                Interest: 95,
-                Aptitude: 80,
-                Personality: 85,
-                Academic: 70,
-                Values: 90
-            }),
-            roadmap: JSON.stringify([
-                "Year 1: Learn design principles and typography.",
-                "Year 2: Master design tools like Figma/Adobe XD.",
-                "Year 3: Conduct user research and wireframing.",
-                "Year 4: Build a strong UI/UX portfolio.",
-                "Year 5: Networking and landing a design agency role."
-            ]),
-            stream: "Any (Humanities/Arts preferred but not mandatory)",
-            courses: "B.Des in Interaction Design, UI/UX Bootcamps",
-            skills: "Empathy, Creativity, Figma, Prototyping, User Research",
-            backupOptions: "Graphic Designer, Product Manager"
+            title: "UX/UI Strategy Lead",
+            description: "Creating the digital experience of the future. Combines artistic expression with investigative user research.",
+            fitCriteria: JSON.stringify({ Realistic: 20, Investigative: 70, Artistic: 95, Social: 60, Enterprising: 50, Conventional: 40 }),
+            roadmap: JSON.stringify(["Degree in Design / Fine Arts", "Google UX Certification", "Junior Product Designer", "UX Lead at Tech Firm", "VP of Design"]),
+            stream: "Creative Arts / Design",
+            courses: "Interaction Design, Cognitive Psychology, Visual Arts",
+            skills: "Figma, Adobe XD, HTML/CSS, User Research, Wireframing",
+            backupOptions: "Frontend Developer, Digital Brand Strategist"
         },
         {
-            title: "Business Analyst",
-            description: "Bridging the gap between IT and business using data analytics.",
-            fitCriteria: JSON.stringify({
-                Interest: 80,
-                Aptitude: 85,
-                Personality: 90,
-                Academic: 80,
-                Values: 85
-            }),
-            roadmap: JSON.stringify([
-                "Year 1: Understand business fundamentals.",
-                "Year 2: Learn Excel and basic data analysis.",
-                "Year 3: Process modeling and requirements gathering.",
-                "Year 4: Certifications in BA (like IIBA).",
-                "Year 5: Corporate internships and MBA (optional)."
-            ]),
-            stream: "Commerce or any with Management",
-            courses: "BBA, B.Com, MBA",
-            skills: "Communication, Excel, SQL, Process Mapping",
-            backupOptions: "Project Coordinator, Sales Analyst"
+            title: "Clinical Neuropsychologist",
+            description: "Helping individuals overcome complex cognitive challenges. Deeply social and investigative.",
+            fitCriteria: JSON.stringify({ Realistic: 10, Investigative: 90, Artistic: 30, Social: 95, Enterprising: 40, Conventional: 60 }),
+            roadmap: JSON.stringify(["B.A. in Psychology", "M.Sc in Neuropsychology", "Ph.D. / Clinical Training", "Private Practice / Hospital", "Research Clinic Director"]),
+            stream: "Humanities / Science",
+            courses: "Clinical Psychology, Brain Mapping, Cognitive Therapy",
+            skills: "Empathy, Scientific Observation, Diagnosis, Patient Care",
+            backupOptions: "Clinical Researcher, Brain Health Consultant"
         },
         {
-            title: "Psychologist",
-            description: "Study mental processes and human behavior to help people.",
-            fitCriteria: JSON.stringify({
-                Interest: 90,
-                Aptitude: 75,
-                Personality: 95,
-                Academic: 85,
-                Values: 95
-            }),
-            roadmap: JSON.stringify([
-                "Year 1: Introduction to Psychology.",
-                "Year 2: Cognitive and Behavioral studies.",
-                "Year 3: Research methods and internships.",
-                "Year 4: Specialization (Clinical, Counseling, etc.).",
-                "Year 5: Master's degree and supervised practice."
-            ]),
-            stream: "Humanities / Arts",
-            courses: "B.A/B.Sc in Psychology, M.A in Clinical Psychology",
-            skills: "Empathy, Listening, Critical Thinking, Research",
-            backupOptions: "Counselor, HR Specialist, Social Worker"
+            title: "Fintech Startup Founder",
+            description: "Building the next generation of financial systems. Requires massive enterprising drive and detail-oriented financial knowledge.",
+            fitCriteria: JSON.stringify({ Realistic: 30, Investigative: 60, Artistic: 40, Social: 50, Enterprising: 95, Conventional: 80 }),
+            roadmap: JSON.stringify(["Degree in Finance/CS", "MBA (Optional)", "Fintech Venture Associate", "Seed Funding Round", "Global Platform CEO"]),
+            stream: "Commerce / Management",
+            courses: "Venture Capital, Blockchain Tech, Business Management",
+            skills: "Persuasion, Financial Modeling, Strategy, Public Speaking",
+            backupOptions: "Venture Capitalist, Financial Director"
+        },
+        {
+            title: "Sustainability Architect",
+            description: "Designing the cities of the future with zero carbon footprint. Artistic vision meets engineering reality.",
+            fitCriteria: JSON.stringify({ Realistic: 70, Investigative: 60, Artistic: 85, Social: 50, Enterprising: 40, Conventional: 70 }),
+            roadmap: JSON.stringify(["Bachelor of Architecture", "LEED Certification", "Green Building Internship", "Principal Urban Planner", "Sustainable City Consultant"]),
+            stream: "Applied Arts / Science",
+            courses: "Sustainable Design, Environmental Engineering, HVAC Tech",
+            skills: "REVIT, SketchUp, Eco-modeling, Project Management",
+            backupOptions: "Urban Designer, Environmental Engineer"
         }
     ];
 
@@ -123,7 +72,8 @@ async function main() {
             create: career,
         });
     }
-    console.log("Seeding completed.");
+
+    console.log('Advanced career dataset seeded successfully.');
 }
 
 main()
